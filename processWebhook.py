@@ -1,6 +1,17 @@
 import flask
 import os
-from flask import send_from_directory
+from flask import send_from_directory, jsonify
+from urllib.request import urlopen  # Use to call APIs
+import json 
+
+def get_jsonparsed_data(url):
+    response = urlopen(url)
+    data = response.read().decode("utf-8")
+    return json.loads(data)
+
+url = ("https://financialmodelingprep.com/api/v3/income-statement/AAPL?apikey=68cea4d99d13d60f59e7a1df544f632a")
+data = get_jsonparsed_data(url)
+
 
 app = flask.Flask(__name__)
 
@@ -10,9 +21,9 @@ def favicon():
                                'favicon.ico', mimetype='image/favicon.png')
 
 @app.route('/')
-@app.route('/home')
+@app.route('/aapl')
 def home():
-    return "Hello World"
+    return jsonify(data)
 
 if __name__ == "__main__":
     app.secret_key = 'ItIsASecret'
