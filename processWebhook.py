@@ -9,8 +9,7 @@ def get_jsonparsed_data(url):
     data = response.read().decode("utf-8")
     return json.loads(data)
 
-url = ("https://financialmodelingprep.com/api/v3/income-statement/AAPL?apikey=68cea4d99d13d60f59e7a1df544f632a")
-data = get_jsonparsed_data(url)
+
 
 
 app = flask.Flask(__name__)
@@ -20,9 +19,11 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/favicon.png')
 
-@app.route('/')
-@app.route('/aapl')
-def home():
+
+@app.route('/<name>')
+def home(name):
+    url = ("https://financialmodelingprep.com/api/v3/income-statement/"+name+"?apikey=68cea4d99d13d60f59e7a1df544f632a")
+    data = get_jsonparsed_data(url)
     return jsonify(data)
 
 if __name__ == "__main__":
